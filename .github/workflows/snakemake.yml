@@ -16,13 +16,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Mambaforge
+      - name: Setup Miniforge
         uses: conda-incubator/setup-miniconda@v3
         with:
-          miniforge-variant: Mambaforge
+          miniforge-variant: Miniforge3
           miniforge-version: latest
           activate-environment: snakemake
           use-mamba: true
+      
+      - name: Install mamba
+        shell: bash -el {0}
+        run: |
+          conda install -n base -c conda-forge mamba
       
       - name: Install Snakemake
         shell: bash -el {0}
@@ -38,6 +43,7 @@ jobs:
       - name: Verify output
         shell: bash -el {0}
         run: |
+          tail -1000 log/*log
           cat workflow/output/hello_output.txt
           if [ "$(cat workflow/output/hello_output.txt)" = "Hello World!" ]; then
             echo "✓ Output verified successfully!"

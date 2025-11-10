@@ -10,14 +10,16 @@ rule compile:
     input:
         cpp="src/hello.cpp",
         cmake="src/CMakeLists.txt"
+    log:
+        "../log/compile.log"
     output:
         "build/hello"
     shell:
         """
-        mkdir -p build
+        mkdir -p build log
         cd build
-        cmake ../src
-        cmake --build .
+        cmake ../src &> {log}
+        cmake --build . &>> {log}
         """
 
 rule run:
@@ -27,8 +29,10 @@ rule run:
         "build/hello"
     output:
         "output/hello_output.txt"
+    log:
+        "log/run.log"
     shell:
         """
         mkdir -p output
-        {input} > {output}
+        {input} > {output} &> {log}
         """
