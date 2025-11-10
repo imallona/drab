@@ -1,0 +1,38 @@
+#!/usr/bin/env snakemake -s
+
+rule all:
+    input:
+        "output/hello_output.txt"
+
+rule compile:
+    conda:
+        "../env/build.yaml"
+    input:
+        cpp="src/hello.cpp",
+        cmake="src/CMakeLists.txt"
+    log:
+        "../log/compile.log"
+    output:
+        "build/hello"
+    shell:
+        """
+        mkdir -p build log
+        cd build
+        cmake ../src &> {log}
+        cmake --build . &>> {log}
+        """
+
+rule run:
+    conda:
+        "../env/build.yaml"
+    input:
+        "build/hello"
+    output:
+        "output/hello_output.txt"
+    log:
+        "log/run.log"
+    shell:
+        """
+        mkdir -p output
+        {input} > {output} &> {log}
+        """

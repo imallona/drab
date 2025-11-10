@@ -1,0 +1,5 @@
+build/
+output/
+.snakemake/
+_codeql_detected_source_root
+src/_codeql_build_dir/
