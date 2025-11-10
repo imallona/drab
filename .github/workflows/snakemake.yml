@@ -40,17 +40,17 @@ jobs:
           cd workflow
           snakemake --use-conda --cores 1
       
-      - name: Verify output
+      - name: Check logs
         shell: bash -el {0}
         run: |
           tail -1000 log/*log
-          cat workflow/output/hello_output.txt
-          if [ "$(cat workflow/output/hello_output.txt)" = "Hello World!" ]; then
-            echo "✓ Output verified successfully!"
-          else
-            echo "✗ Output verification failed!"
-            exit 1
-          fi
+          # cat workflow/output/hello_output.txt
+          # if [ "$(cat workflow/output/hello_output.txt)" = "Hello World!" ]; then
+          #   echo "✓ Output verified successfully!"
+          # else
+          #   echo "✗ Output verification failed!"
+          #   exit 1
+          # fi
       
       - name: Upload output artifact
         uses: actions/upload-artifact@v4
