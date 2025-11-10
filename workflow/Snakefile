@@ -16,7 +16,6 @@ rule compile:
         cd build
         cmake ../src
         cmake --build .
-        cp hello ../build/hello
         """
 
 rule run:
