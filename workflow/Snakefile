@@ -1,0 +1,31 @@
+rule all:
+    input:
+        "output/hello_output.txt"
+
+rule compile:
+    input:
+        cpp="src/hello.cpp",
+        cmake="src/CMakeLists.txt"
+    output:
+        "build/hello"
+    conda:
+        "../env/build.yaml"
+    shell:
+        """
+        mkdir -p build
+        cd build
+        cmake ../src
+        cmake --build .
+        cp hello ../build/hello
+        """
+
+rule run:
+    input:
+        "build/hello"
+    output:
+        "output/hello_output.txt"
+    shell:
+        """
+        mkdir -p output
+        {input} > {output}
+        """
