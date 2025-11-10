@@ -1,4 +1,4 @@
-name: Run Snakemake Workflow
+name: run workflow
 
 on:
   pull_request:
@@ -15,14 +15,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
-      - name: Setup Mambaforge
+
+      - name: miniconda
         uses: conda-incubator/setup-miniconda@v3
         with:
-          miniforge-variant: Mambaforge
-          miniforge-version: latest
-          activate-environment: snakemake
           use-mamba: true
+          activate-environment: snakemake
       
       - name: Install Snakemake
         shell: bash -el {0}
@@ -46,9 +44,9 @@ jobs:
             exit 1
           fi
       
-      - name: Upload output artifact
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: workflow-output
-          path: workflow/output/
+      # - name: Upload output artifact
+      #   uses: actions/upload-artifact@v4
+      #   if: always()
+      #   with:
+      #     name: workflow-output
+      #     path: workflow/output/

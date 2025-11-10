@@ -1,15 +1,17 @@
+#!/usr/bin/env snakemake -s
+
 rule all:
     input:
         "output/hello_output.txt"
 
 rule compile:
+    conda:
+        "../env/build.yaml"
     input:
         cpp="src/hello.cpp",
         cmake="src/CMakeLists.txt"
     output:
         "build/hello"
-    conda:
-        "../env/build.yaml"
     shell:
         """
         mkdir -p build
@@ -19,6 +21,8 @@ rule compile:
         """
 
 rule run:
+    conda:
+        "../env/build.yaml"
     input:
         "build/hello"
     output:
