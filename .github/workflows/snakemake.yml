@@ -1,0 +1,52 @@
+name: Run Snakemake Workflow
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  snakemake:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Mambaforge
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          miniforge-variant: Mambaforge
+          miniforge-version: latest
+          activate-environment: snakemake
+          use-mamba: true
+      
+      - name: Install Snakemake
+        shell: bash -el {0}
+        run: |
+          mamba install -c conda-forge -c bioconda snakemake
+      
+      - name: Run Snakemake workflow
+        shell: bash -el {0}
+        run: |
+          cd workflow
+          snakemake --use-conda --cores 1
+      
+      - name: Verify output
+        shell: bash -el {0}
+        run: |
+          cat workflow/output/hello_output.txt
+          if [ "$(cat workflow/output/hello_output.txt)" = "Hello World!" ]; then
+            echo "✓ Output verified successfully!"
+          else
+            echo "✗ Output verification failed!"
+            exit 1
+          fi
+      
+      - name: Upload output artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: workflow-output
+          path: workflow/output/

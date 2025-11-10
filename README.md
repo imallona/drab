@@ -39,3 +39,12 @@ cmake ../src
 cmake --build .
 ./hello
 ```
+
+### CI/CD
+
+This repository includes a GitHub Actions workflow that:
+- Runs automatically on pull requests to main
+- Can be manually triggered via workflow_dispatch
+- Uses conda-incubator/setup-miniconda to set up Mambaforge
+- Installs Snakemake and runs the workflow
+- Verifies the output and uploads artifacts
